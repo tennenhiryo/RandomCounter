@@ -3,7 +3,9 @@
 //  Google Keepの「番号 英文」のリストを
 //  バッククォート(`)の間に貼り付けてください。
 // ==========================================
-const rawData = `
+// data.js
+// 必ず window.rawData = `...`; という形にしてください
+window.rawData = `
 001 Let’s try anyway.
 002 Following the speech, we had dinner.
 003 Please refer to the map.

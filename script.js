@@ -1,19 +1,34 @@
+// script.js
+
 // テキストデータを分解して辞書形式に変換
 const sentenceList = {};
 
-// data.js で定義された rawData を使用
-if (typeof rawData !== 'undefined') {
-    rawData.trim().split('\n').forEach(line => {
+// データの読み込みチェック
+if (typeof window.rawData !== 'undefined') {
+    window.rawData.trim().split('\n').forEach(line => {
         if (!line.trim()) return;
-        const parts = line.trim().split(' ');
-        const num = parseInt(parts[0], 10);
-        const text = parts.slice(1).join(' ');
-        if (!isNaN(num) && text) {
+        
+        // 全角・半角スペース、タブなどあらゆる空白で分割
+        // "001" と "English..." に分ける
+        const match = line.match(/^(\d+)[.\s\t　]+(.+)$/);
+
+        if (match) {
+            const num = parseInt(match[1], 10);
+            const text = match[2].trim();
             sentenceList[num] = text;
+        } else {
+            // 予備ロジック
+            const parts = line.trim().split(/\s+/);
+            const num = parseInt(parts[0], 10);
+            const text = parts.slice(1).join(' ');
+            if (!isNaN(num) && text) {
+                sentenceList[num] = text;
+            }
         }
     });
 } else {
-    console.error("data.js not found");
+    // データがない場合はアラートを出す（デバッグ用）
+    alert("【エラー】データが読み込めません。\n1. data.jsの中身が window.rawData = ... になっていますか？\n2. index.htmlで data.js を先に読み込んでいますか？");
 }
 
 let numbers = [];
@@ -38,15 +53,20 @@ function shuffle(array) {
 }
 
 function startGame() {
-    const min = parseInt(document.getElementById('min-val').value);
-    const max = parseInt(document.getElementById('max-val').value);
+    const minInput = document.getElementById('min-val').value;
+    const maxInput = document.getElementById('max-val').value;
+    
+    const min = parseInt(minInput);
+    const max = parseInt(maxInput);
 
-    if (isNaN(min) || isNaN(max)) { alert("Enter Numbers"); return; }
-    if (min > max) { alert("Min > Max Error"); return; }
+    if (minInput === "" || maxInput === "" || isNaN(min) || isNaN(max)) { 
+        alert("数字を入力してください"); return; 
+    }
+    if (min > max) { alert("最小値エラー"); return; }
 
     numbers = [];
     for (let i = min; i <= max; i++) numbers.push(i);
-    if (numbers.length === 0) { alert("No Numbers Found"); return; }
+    if (numbers.length === 0) { alert("数字が見つかりません"); return; }
 
     numbers = shuffle(numbers);
     currentIndex = 0;
@@ -76,7 +96,7 @@ function updateCard() {
     
     const currentNum = numbers[currentIndex];
     
-    // アニメーション一時停止（裏返り防止）
+    // アニメーション一時停止
     cardInner.style.transition = 'none';
     cardWrapper.style.transition = 'none';
 
@@ -87,7 +107,16 @@ function updateCard() {
 
     // 内容更新
     frontFace.innerText = currentNum;
-    backFace.innerText = sentenceList[currentNum] ? sentenceList[currentNum] : "";
+    
+    // データがある場合とない場合で表示を変える
+    if (sentenceList[currentNum]) {
+        backFace.innerText = sentenceList[currentNum];
+        backFace.style.color = "var(--text-main)"; 
+    } else {
+        // データが見つからない場合はこう表示される
+        backFace.innerText = "No Data";
+        backFace.style.color = "var(--text-sub)";
+    }
 
     // 強制再描画
     void cardInner.offsetWidth; 
@@ -126,12 +155,12 @@ cardWrapper.addEventListener('touchend', () => {
     // タップ判定
     if (Math.abs(diffX) < 10) {
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
-        const currentNum = numbers[currentIndex];
-        // 英文がある場合のみ裏返す
-        if (sentenceList[currentNum]) {
-            cardInner.classList.toggle('is-flipped');
-            isFlipped = !isFlipped;
-        }
+        
+        // 【修正点】データ有無にかかわらず強制的に裏返す！
+        // これで裏面が "No Data" と表示されれば、タップ処理自体は成功しているとわかる
+        cardInner.classList.toggle('is-flipped');
+        isFlipped = !isFlipped;
+        
         return;
     }
 
