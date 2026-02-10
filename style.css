@@ -4,12 +4,11 @@
     --text-sub: #86868b;
     --accent-blue: #0a84ff;
     --accent-red: #ff453a;
-    --glass-bg: rgba(255, 255, 255, 0.05); /* パネルも少し透明度UP */
+    --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* ... (body, container, screen, glass-panel, input, btn, header は変更なし) ... */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0; padding: 0;
@@ -88,7 +87,6 @@ input:focus { border-color: var(--accent-blue); }
     padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;
 }
 
-/* --- カードエリア --- */
 #card-container {
     position: relative;
     height: 420px; width: 100%;
@@ -103,53 +101,45 @@ input:focus { border-color: var(--accent-blue); }
     z-index: 10;
 }
 
-/* 奥のカード（初期状態） */
 #next-card {
     width: 300px; height: 420px;
     position: absolute;
     z-index: 5;
     transform: scale(0.9) translateY(20px);
-    opacity: 0.8; /* 少しだけ見やすく */
-    /* filter: brightness() は削除 */
-    
+    opacity: 0.8;
     border-radius: 36px;
-    /* 背景をより透明に */
     background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
     pointer-events: none;
-    overflow: hidden; /* 擬似要素がはみ出ないように */
-    
+    overflow: hidden; 
     transition: 
         transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
         opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* 【新設】奥のカードにかぶせる「暗幕」レイヤー */
 #next-card::after {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 36px;
     pointer-events: none;
     transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* 手前に来る時の状態 */
 #next-card.coming-up {
     transform: scale(1.0) translateY(0px) !important;
     opacity: 1.0 !important;
 }
-/* 手前に来るときは「暗幕」を透明にする */
 #next-card.coming-up::after {
     opacity: 0 !important;
 }
 
 #next-card .card-face {
     box-shadow: none; background: transparent; border: none;
-    backdrop-filter: none; /* 奥にあるときはぼかしを二重にしない */
+    backdrop-filter: none;
 }
 
 #card-inner {
@@ -158,11 +148,10 @@ input:focus { border-color: var(--accent-blue); }
     transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-style: preserve-3d;
     border-radius: 36px;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); /* 影を少し柔らかく */
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
 }
 #card-inner.is-flipped { transform: rotateY(180deg); }
 
-/* 表面・裏面共通のガラス設定 */
 .card-face {
     position: absolute; width: 100%; height: 100%;
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
@@ -170,28 +159,22 @@ input:focus { border-color: var(--accent-blue); }
     display: flex; justify-content: center; align-items: center;
     padding: 30px; box-sizing: border-box;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    /* 共通のすりガラス効果 */
     backdrop-filter: blur(30px) saturate(120%); 
     -webkit-backdrop-filter: blur(30px) saturate(120%);
 }
 
-/* 表面（数字）- 透明度UP */
 .card-front {
     font-size: 6rem; font-weight: 700; color: var(--text-main);
-    /* ほぼ透明な白グラデーション */
     background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
 }
 
-/* 裏面（英文）- 透明度大幅UP */
 .card-back {
     transform: rotateY(180deg);
     font-size: 1.4rem; color: var(--text-main); line-height: 1.6; font-weight: 500;
-    /* 半透明の黒グラデーション（以前よりかなり薄く） */
     background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
-    border: 1px solid rgba(255, 255, 255, 0.08); /* 裏面の枠線は少し控えめに */
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ... (hint, modal, result-panel などは変更なし) ... */
 .hint { color: var(--text-sub); margin-top: 20px; font-size: 0.9rem; }
 .modal {
     display: none; position: fixed; top: 0; left: 0;
@@ -222,3 +205,14 @@ input:focus { border-color: var(--accent-blue); }
     font-size: 0.95rem; color: #ddd;
 }
 .list-item:last-child { border-bottom: none; }
+
+/* ▼▼ バージョン表記のスタイル ▼▼ */
+.version {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    color: var(--text-sub);
+    opacity: 0.6;
+    letter-spacing: 1px;
+}
