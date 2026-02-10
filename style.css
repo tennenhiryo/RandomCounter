@@ -1,14 +1,16 @@
 :root {
-    --bg-color: #050505;
-    --card-bg: #111;
-    --text-main: #fff;
-    --neon-blue: #00f3ff;
-    --neon-pink: #ff00ff;
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --bg-color: #000000;
+    --text-main: #f5f5f7; /* iOS White */
+    --text-sub: #86868b;
+    --accent-blue: #0a84ff;
+    --accent-red: #ff453a;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 body {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -23,11 +25,30 @@ body {
     touch-action: none;
 }
 
+/* 背景のオーブ（光の演出） */
+.background-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    opacity: 0.6;
+}
+.orb-1 {
+    width: 300px; height: 300px;
+    background: #1a2a6c;
+    top: -50px; left: -50px;
+}
+.orb-2 {
+    width: 250px; height: 250px;
+    background: #2a0845;
+    bottom: -50px; right: -50px;
+}
+
 .container {
     width: 100%;
     max-width: 400px;
     height: 100vh;
-    padding: 20px;
+    padding: 24px;
     box-sizing: border-box;
     position: relative;
     display: flex;
@@ -41,145 +62,122 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 
-/* ネオンテキスト */
-.neon-text {
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
-    letter-spacing: 2px;
-}
-.neon-text-small {
-    color: #888;
-    text-shadow: 0 0 5px var(--neon-blue);
-    font-size: 0.8rem;
-}
-.neon-text-blue {
-    color: var(--neon-blue);
-    text-shadow: 0 0 15px var(--neon-blue);
-}
-
-/* ボタン */
-.btn-neon {
-    background: transparent;
-    color: var(--neon-blue);
-    border: 2px solid var(--neon-blue);
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--neon-blue) inset, 0 0 10px var(--neon-blue);
-    text-transform: uppercase;
-    font-family: inherit;
-    transition: 0.2s;
-    margin: 10px 0;
+/* 共通ガラスパネル */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: var(--glass-shadow);
     width: 100%;
-    max-width: 250px;
-}
-.btn-neon:active {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: 0 0 20px var(--neon-blue);
-}
-.btn-danger {
-    color: var(--neon-pink);
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 10px var(--neon-pink) inset, 0 0 10px var(--neon-pink);
-}
-.btn-danger:active {
-    background: var(--neon-pink);
-    color: #000;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-/* 入力エリア */
+h2, h3 { margin: 0 0 20px 0; font-weight: 600; letter-spacing: 0.5px; }
+
+/* 入力周り */
 .input-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin: 30px 0;
+    gap: 10px;
+    margin-bottom: 24px;
 }
 input {
-    font-size: 1.5rem;
-    padding: 10px;
     width: 80px;
+    padding: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 1.2rem;
     text-align: center;
-    border: 1px solid var(--neon-blue);
-    background: #000;
-    color: var(--neon-blue);
-    border-radius: 5px;
-    box-shadow: 0 0 5px var(--neon-blue);
+    outline: none;
     font-family: inherit;
 }
+input:focus { border-color: var(--accent-blue); }
+.separator { color: var(--text-sub); font-size: 0.9rem; }
 
-/* 一時停止ボタン */
-#pause-btn {
-    position: absolute;
-    top: 15px;
-    left: 20px;
-    font-size: 1.5rem;
+/* ガラスボタン */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-main);
+    padding: 16px 0;
+    width: 100%;
+    border-radius: 18px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    color: var(--neon-blue);
-    z-index: 10;
-    border: 1px solid var(--neon-blue);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 0 5px var(--neon-blue);
+    transition: 0.2s;
+    backdrop-filter: blur(4px);
 }
+.btn-glass:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.98);
+}
+.btn-danger { color: var(--accent-red); background: rgba(255, 69, 58, 0.1); border-color: rgba(255, 69, 58, 0.3); margin-top: 10px;}
 
-/* モーダル */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
-    z-index: 100;
-    justify-content: center;
+/* ヘッダー周り */
+.header-controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(5px);
+    padding: 0 10px;
+    margin-bottom: 10px;
 }
-.modal.active { display: flex; }
-.modal-content {
-    background: #111;
-    padding: 40px;
-    border: 1px solid var(--neon-blue);
-    box-shadow: 0 0 20px var(--neon-blue);
-    border-radius: 10px;
-    text-align: center;
-    width: 80%;
-    max-width: 300px;
+.glass-icon-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    display: flex; justify-content: center; align-items: center;
+}
+.status-badge {
+    background: rgba(10, 132, 255, 0.2);
+    color: var(--accent-blue);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 /* カードエリア */
 #card-container {
     position: relative;
-    height: 400px;
+    height: 420px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px;
-    margin: 20px 0;
+    perspective: 1200px;
 }
 #card {
-    width: 280px;
-    height: 400px;
+    width: 300px; height: 420px;
     position: absolute;
     cursor: grab;
     will-change: transform;
 }
 #card-inner {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     position: relative;
     text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 少しバネのような動き */
     transform-style: preserve-3d;
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-    border-radius: 15px;
-    border: 1px solid var(--glass-border);
+    border-radius: 36px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 #card-inner.is-flipped { transform: rotateY(180deg); }
 
@@ -187,70 +185,83 @@ input {
     position: absolute;
     width: 100%; height: 100%;
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
-    border-radius: 15px;
+    border-radius: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--card-bg);
-    padding: 20px;
+    padding: 30px;
     box-sizing: border-box;
+    /* すりガラスカード */
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
+
 .card-front {
     font-size: 6rem;
-    font-weight: bold;
-    color: var(--neon-blue);
-    text-shadow: 0 0 20px var(--neon-blue);
-    border: 1px solid var(--neon-blue);
+    font-weight: 700;
+    color: var(--text-main);
 }
 .card-back {
     transform: rotateY(180deg);
-    font-size: 1.3rem;
-    color: var(--neon-pink);
-    text-shadow: 0 0 10px var(--neon-pink);
-    line-height: 1.5;
-    background: #1a051a;
-    border: 1px solid var(--neon-pink);
+    font-size: 1.4rem;
+    color: var(--text-main);
+    line-height: 1.6;
+    background: linear-gradient(145deg, rgba(40,40,40,0.9), rgba(20,20,20,0.95)); /* 裏面は少し濃くして文字を見やすく */
+    font-weight: 500;
 }
 
-.hint { 
-    color: #666; 
-    margin-top: 10px; 
-    font-size: 0.8rem; 
-    letter-spacing: 1px;
+.hint { color: var(--text-sub); margin-top: 20px; font-size: 0.9rem; }
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
 }
+.modal.active { display: flex; }
 
 /* 結果画面 */
-#result-screen { justify-content: flex-start; padding-top: 50px; }
-.stats {
-    background: #111;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #333;
-    width: 100%;
+.result-panel {
+    display: flex; flex-direction: column; height: 80%; max-height: 600px;
 }
-.stat-big { font-size: 3.5rem; font-weight: bold; margin: 10px 0; }
+.stats-container {
+    display: flex; justify-content: space-around;
+    margin-bottom: 20px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
+    padding: 15px;
+}
+.stat-item { display: flex; flex-direction: column; }
+.stat-label { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 5px; }
+.stat-value { font-size: 1.2rem; font-weight: 600; }
+.stat-value.highlight { color: var(--accent-blue); font-size: 1.5rem; }
+
 .list-wrapper {
     flex-grow: 1;
-    width: 100%;
-    min-height: 0;
+    overflow: hidden;
     margin-bottom: 20px;
-    position: relative;
-    border: 1px solid #333;
-    border-radius: 10px;
-    background: #000;
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
 }
 .list-box {
     height: 100%;
-    max-height: 250px;
     overflow-y: auto;
     text-align: left;
-    padding: 15px;
-    font-size: 0.9rem;
-    color: #ddd;
-    overscroll-behavior: contain;
+    padding: 0 15px;
 }
 .list-item {
-    border-bottom: 1px solid #333;
-    padding: 10px 0;
+    padding: 15px 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.95rem;
+    color: #ddd;
 }
+.list-item:last-child { border-bottom: none; }

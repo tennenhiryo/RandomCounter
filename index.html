@@ -3,25 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Swipe</title>
+    <title>Liquid Glass Swipe</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="background-orb orb-1"></div>
+<div class="background-orb orb-2"></div>
+
 <div class="container">
     <div id="setup-screen" class="screen active">
-        <h2 class="neon-text">RANGE SETUP</h2>
-        <div class="input-group">
-            <input type="number" id="min-val" value="1"> 
-            <span class="neon-text">TO</span>
-            <input type="number" id="max-val" value="10">
+        <div class="glass-panel">
+            <h2>Range Setup</h2>
+            <div class="input-group">
+                <input type="number" id="min-val" value="1" placeholder="Start"> 
+                <span class="separator">to</span>
+                <input type="number" id="max-val" value="10" placeholder="End">
+            </div>
+            <button class="btn-glass" onclick="startGame()">Start Game</button>
         </div>
-        <button class="btn-neon" onclick="startGame()">START GAME</button>
     </div>
 
     <div id="game-screen" class="screen">
-        <div id="pause-btn" onclick="togglePause()">⏸</div>
-        <div id="progress" class="neon-text-small">READY...</div>
+        <div class="header-controls">
+            <button id="pause-btn" class="glass-icon-btn" onclick="togglePause()">II</button>
+            <div id="progress" class="status-badge">Ready</div>
+        </div>
         
         <div id="card-container">
             <div id="card">
@@ -32,31 +39,36 @@
             </div>
         </div>
         
-        <div class="hint">TAP TO FLIP / SWIPE TO NEXT</div>
+        <div class="hint">Tap to Flip / Swipe to Next</div>
     </div>
 
     <div id="pause-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="neon-text">PAUSED</h3>
-            <button onclick="togglePause()" class="btn-neon">RESUME</button>
-            <button onclick="finishGame()" class="btn-neon btn-danger">FINISH</button>
+        <div class="modal-content glass-panel">
+            <h3>Paused</h3>
+            <button onclick="togglePause()" class="btn-glass">Resume</button>
+            <button onclick="finishGame()" class="btn-glass btn-danger">Finish & Check</button>
         </div>
     </div>
 
     <div id="result-screen" class="screen">
-        <h2 class="neon-text">RESULT</h2>
-        <div class="stats">
-            <div class="stats-label">CHECKED RATE</div>
-            <div class="stat-big neon-text-blue" id="result-percent">0%</div>
-            <p>CHECKED / TOTAL: <span id="result-fraction">0/0</span></p>
-        </div>
-        
-        <div class="list-wrapper">
-            <div class="list-box" id="left-list"></div>
-        </div>
-        
-        <div class="footer-btn">
-            <button class="btn-neon" onclick="location.reload()">RETRY</button>
+        <div class="glass-panel result-panel">
+            <h2>Result</h2>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-label">Checked</div>
+                    <div class="stat-value" id="result-fraction">0/0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Rate</div>
+                    <div class="stat-value highlight" id="result-percent">0%</div>
+                </div>
+            </div>
+            
+            <div class="list-wrapper">
+                <div class="list-box" id="left-list"></div>
+            </div>
+            
+            <button class="btn-glass" onclick="location.reload()">Retry</button>
         </div>
     </div>
 </div>

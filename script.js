@@ -41,12 +41,12 @@ function startGame() {
     const min = parseInt(document.getElementById('min-val').value);
     const max = parseInt(document.getElementById('max-val').value);
 
-    if (isNaN(min) || isNaN(max)) { alert("INPUT NUMBERS"); return; }
-    if (min > max) { alert("MIN > MAX ERROR"); return; }
+    if (isNaN(min) || isNaN(max)) { alert("Enter Numbers"); return; }
+    if (min > max) { alert("Min > Max Error"); return; }
 
     numbers = [];
     for (let i = min; i <= max; i++) numbers.push(i);
-    if (numbers.length === 0) { alert("NO NUMBERS FOUND"); return; }
+    if (numbers.length === 0) { alert("No Numbers Found"); return; }
 
     numbers = shuffle(numbers);
     currentIndex = 0;
@@ -76,7 +76,7 @@ function updateCard() {
     
     const currentNum = numbers[currentIndex];
     
-    // 【重要】アニメーションを一時的に切る（裏返り防止）
+    // アニメーション一時停止（裏返り防止）
     cardInner.style.transition = 'none';
     cardWrapper.style.transition = 'none';
 
@@ -89,13 +89,13 @@ function updateCard() {
     frontFace.innerText = currentNum;
     backFace.innerText = sentenceList[currentNum] ? sentenceList[currentNum] : "";
 
-    // 強制再描画（Reflow）
+    // 強制再描画
     void cardInner.offsetWidth; 
 
     // アニメーション復帰
-    cardInner.style.transition = 'transform 0.6s';
+    cardInner.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 
-    document.getElementById('progress').innerText = `LEFT: ${numbers.length - currentIndex}`;
+    document.getElementById('progress').innerText = `Left: ${numbers.length - currentIndex}`;
 }
 
 // --- タッチ操作イベント ---
@@ -174,7 +174,7 @@ function showResults() {
     listContainer.innerHTML = "";
 
     if (leftSwiped.length === 0) {
-        listContainer.innerText = "NONE";
+        listContainer.innerText = "None";
     } else {
         leftSwiped.forEach(num => {
             const div = document.createElement('div');
