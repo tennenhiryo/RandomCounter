@@ -604,5 +604,4 @@ const rawData = `
 598 a lack of information
 599 Customer satisfaction is essential to us.
 600 the majority of employees
-
 `;
