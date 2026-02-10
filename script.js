@@ -1,34 +1,23 @@
-// script.js
-
-// テキストデータを分解して辞書形式に変換
+// data.js の読み込みチェック & 解析
 const sentenceList = {};
 
-// データの読み込みチェック
 if (typeof window.rawData !== 'undefined') {
     window.rawData.trim().split('\n').forEach(line => {
         if (!line.trim()) return;
-        
-        // 全角・半角スペース、タブなどあらゆる空白で分割
-        // "001" と "English..." に分ける
         const match = line.match(/^(\d+)[.\s\t　]+(.+)$/);
-
         if (match) {
             const num = parseInt(match[1], 10);
             const text = match[2].trim();
             sentenceList[num] = text;
         } else {
-            // 予備ロジック
             const parts = line.trim().split(/\s+/);
             const num = parseInt(parts[0], 10);
             const text = parts.slice(1).join(' ');
-            if (!isNaN(num) && text) {
-                sentenceList[num] = text;
-            }
+            if (!isNaN(num) && text) sentenceList[num] = text;
         }
     });
 } else {
-    // データがない場合はアラートを出す（デバッグ用）
-    alert("【エラー】データが読み込めません。\n1. data.jsの中身が window.rawData = ... になっていますか？\n2. index.htmlで data.js を先に読み込んでいますか？");
+    alert("エラー: データを読み込めませんでした。");
 }
 
 let numbers = [];
@@ -39,10 +28,13 @@ let currentX = 0;
 let isDragging = false;
 let isFlipped = false;
 
+// 要素取得
 const cardWrapper = document.getElementById('card'); 
 const cardInner = document.getElementById('card-inner'); 
 const frontFace = document.getElementById('card-front');
 const backFace = document.getElementById('card-back');
+const nextCard = document.getElementById('next-card');
+const nextCardFront = document.getElementById('next-card-front');
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -55,18 +47,17 @@ function shuffle(array) {
 function startGame() {
     const minInput = document.getElementById('min-val').value;
     const maxInput = document.getElementById('max-val').value;
-    
     const min = parseInt(minInput);
     const max = parseInt(maxInput);
 
     if (minInput === "" || maxInput === "" || isNaN(min) || isNaN(max)) { 
-        alert("数字を入力してください"); return; 
+        alert("数値を入力してください"); return; 
     }
-    if (min > max) { alert("最小値エラー"); return; }
+    if (min > max) { alert("範囲の設定が正しくありません"); return; }
 
     numbers = [];
     for (let i = min; i <= max; i++) numbers.push(i);
-    if (numbers.length === 0) { alert("数字が見つかりません"); return; }
+    if (numbers.length === 0) { alert("指定された範囲のデータがありません"); return; }
 
     numbers = shuffle(numbers);
     currentIndex = 0;
@@ -96,35 +87,36 @@ function updateCard() {
     
     const currentNum = numbers[currentIndex];
     
-    // アニメーション一時停止
+    // 1. メインカード更新
     cardInner.style.transition = 'none';
     cardWrapper.style.transition = 'none';
-
-    // 状態リセット
     cardInner.classList.remove('is-flipped');
     cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
     isFlipped = false;
 
-    // 内容更新
     frontFace.innerText = currentNum;
     
-    // データがある場合とない場合で表示を変える
     if (sentenceList[currentNum]) {
         backFace.innerText = sentenceList[currentNum];
         backFace.style.color = "var(--text-main)"; 
     } else {
-        // データが見つからない場合はこう表示される
-        backFace.innerText = "No Data";
+        backFace.innerText = "データなし";
         backFace.style.color = "var(--text-sub)";
     }
 
-    // 強制再描画
-    void cardInner.offsetWidth; 
+    // 2. 次のカード更新
+    const nextNum = numbers[currentIndex + 1];
+    if (nextNum !== undefined) {
+        nextCard.style.display = 'flex';
+        nextCardFront.innerText = nextNum;
+    } else {
+        nextCard.style.display = 'none';
+    }
 
-    // アニメーション復帰
+    void cardInner.offsetWidth; // 強制再描画
     cardInner.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 
-    document.getElementById('progress').innerText = `Left: ${numbers.length - currentIndex}`;
+    document.getElementById('progress').innerText = `残り: ${numbers.length - currentIndex}`;
 }
 
 // --- タッチ操作イベント ---
@@ -155,24 +147,19 @@ cardWrapper.addEventListener('touchend', () => {
     // タップ判定
     if (Math.abs(diffX) < 10) {
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
-        
-        // 【修正点】データ有無にかかわらず強制的に裏返す！
-        // これで裏面が "No Data" と表示されれば、タップ処理自体は成功しているとわかる
         cardInner.classList.toggle('is-flipped');
         isFlipped = !isFlipped;
-        
         return;
     }
 
     // スワイプ判定
-    cardWrapper.style.transition = 'transform 0.3s ease-out';
-    if (diffX > 100) { 
-        // 右へ
-        cardWrapper.style.transform = `translate(100vw, 0px) rotate(45deg)`;
+    cardWrapper.style.transition = 'transform 0.4s ease-out';
+    
+    if (diffX > 80) { // 右スワイプ
+        cardWrapper.style.transform = `translate(120vw, 0px) rotate(30deg)`;
         setTimeout(() => { nextNum(false); }, 300);
-    } else if (diffX < -100) { 
-        // 左へ
-        cardWrapper.style.transform = `translate(-100vw, 0px) rotate(-45deg)`;
+    } else if (diffX < -80) { // 左スワイプ
+        cardWrapper.style.transform = `translate(-120vw, 0px) rotate(-30deg)`;
         setTimeout(() => { nextNum(true); }, 300);
     } else { 
         // 元に戻る
@@ -193,18 +180,23 @@ function showResults() {
     document.getElementById('result-screen').classList.add('active');
 
     const totalDone = currentIndex; 
-    const leftCount = leftSwiped.length;
-    const percent = totalDone === 0 ? 0 : Math.round((leftCount / totalDone) * 100);
+    const unknownCount = leftSwiped.length;
+    const knownCount = totalDone - unknownCount;
 
-    document.getElementById('result-fraction').innerText = `${leftCount} / ${totalDone}`;
+    const percent = totalDone === 0 ? 0 : Math.round((knownCount / totalDone) * 100);
+
+    document.getElementById('result-fraction').innerText = `${knownCount} / ${totalDone}`;
     document.getElementById('result-percent').innerText = `${percent}%`;
     
     const listContainer = document.getElementById('left-list');
     listContainer.innerHTML = "";
 
     if (leftSwiped.length === 0) {
-        listContainer.innerText = "None";
+        listContainer.innerText = "全問正解です！";
+        listContainer.style.textAlign = "center";
+        listContainer.style.padding = "20px";
     } else {
+        listContainer.style.textAlign = "left";
         leftSwiped.forEach(num => {
             const div = document.createElement('div');
             div.className = "list-item";

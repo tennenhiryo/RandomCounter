@@ -14,52 +14,56 @@
 <div class="container">
     <div id="setup-screen" class="screen active">
         <div class="glass-panel">
-            <h2>Range Setup</h2>
+            <h2>出題範囲</h2>
             <div class="input-group">
-                <input type="number" id="min-val" value="1" placeholder="Start"> 
-                <span class="separator">to</span>
-                <input type="number" id="max-val" value="10" placeholder="End">
+                <input type="number" id="min-val" value="1" placeholder="開始"> 
+                <span class="separator">〜</span>
+                <input type="number" id="max-val" value="10" placeholder="終了">
             </div>
-            <button class="btn-glass" onclick="startGame()">Start Game</button>
+            <button class="btn-glass" onclick="startGame()">学習を開始</button>
         </div>
     </div>
 
     <div id="game-screen" class="screen">
         <div class="header-controls">
             <button id="pause-btn" class="glass-icon-btn" onclick="togglePause()">II</button>
-            <div id="progress" class="status-badge">Ready</div>
+            <div id="progress" class="status-badge">準備完了</div>
         </div>
         
         <div id="card-container">
+            <div id="next-card">
+                <div class="card-face card-front" id="next-card-front">0</div>
+            </div>
+
             <div id="card">
                 <div id="card-inner">
                     <div class="card-face card-front" id="card-front">0</div>
-                    <div class="card-face card-back" id="card-back">Thinking...</div>
+                    <div class="card-face card-back" id="card-back">読み込み中...</div>
                 </div>
             </div>
         </div>
         
-        <div class="hint">Tap to Flip / Swipe to Next</div>
+        <div class="hint">タップで裏返す / スワイプで次へ</div>
     </div>
 
     <div id="pause-modal" class="modal">
         <div class="modal-content glass-panel">
-            <h3>Paused</h3>
-            <button onclick="togglePause()" class="btn-glass">Resume</button>
-            <button onclick="finishGame()" class="btn-glass btn-danger">Finish & Check</button>
+            <h3>一時停止</h3>
+            <button onclick="togglePause()" class="btn-glass">再開</button>
+            <button onclick="finishGame()" class="btn-glass btn-danger">終了して結果を見る</button>
         </div>
     </div>
 
     <div id="result-screen" class="screen">
         <div class="glass-panel result-panel">
-            <h2>Result</h2>
+            <h2>学習結果</h2>
             <div class="stats-container">
                 <div class="stat-item">
-                    <div class="stat-label">Checked</div>
+                    <div class="stat-label">覚えた数</div> 
                     <div class="stat-value" id="result-fraction">0/0</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-label">Rate</div>
+                    <div class="stat-label">正解率</div>
                     <div class="stat-value highlight" id="result-percent">0%</div>
                 </div>
             </div>
@@ -68,7 +72,7 @@
                 <div class="list-box" id="left-list"></div>
             </div>
             
-            <button class="btn-glass" onclick="location.reload()">Retry</button>
+            <button class="btn-glass" onclick="location.reload()">もう一度</button>
         </div>
     </div>
 </div>
