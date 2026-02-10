@@ -112,9 +112,10 @@ function updateCard() {
         
         // アニメーションリセット：奥に戻す
         nextCard.classList.remove('coming-up');
-        // CSSの初期状態に戻す（念のためJSでも指定）
+        // CSSの初期状態に戻す
         nextCard.style.transform = ''; 
         nextCard.style.opacity = '';
+        nextCard.style.filter = ''; // 明るさもリセット
         
     } else {
         nextCard.style.display = 'none';
@@ -164,23 +165,14 @@ cardWrapper.addEventListener('touchend', () => {
     
     if (diffX > 80) { // 右スワイプ
         cardWrapper.style.transform = `translate(120vw, 0px) rotate(30deg)`;
-        
-        // 奥のカードを手前に
-        if (numbers[currentIndex + 1] !== undefined) {
-            nextCard.classList.add('coming-up');
-        }
-        
+        if (numbers[currentIndex + 1] !== undefined) nextCard.classList.add('coming-up');
         setTimeout(() => { nextNum(false); }, 300);
 
     } else if (diffX < -80) { // 左スワイプ
         cardWrapper.style.transform = `translate(-120vw, 0px) rotate(-30deg)`;
-        
-        // 奥のカードを手前に
-        if (numbers[currentIndex + 1] !== undefined) {
-            nextCard.classList.add('coming-up');
-        }
-
+        if (numbers[currentIndex + 1] !== undefined) nextCard.classList.add('coming-up');
         setTimeout(() => { nextNum(true); }, 300);
+        
     } else { 
         // 元に戻る
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;

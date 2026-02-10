@@ -13,7 +13,6 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0; padding: 0;
     display: flex; justify-content: center; align-items: center;
-    /* 画面固定・スクロール防止の強化 */
     width: 100vw; height: 100vh; position: fixed;
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -102,27 +101,36 @@ input:focus { border-color: var(--accent-blue); }
     z-index: 10;
 }
 
-/* 奥のカード（初期状態） */
+/* 奥のカード */
 #next-card {
     width: 300px; height: 420px;
     position: absolute;
     z-index: 5;
-    /* 小さく・下に・薄くしておく */
+    
+    /* 初期状態：小さく・下・半透明・暗く */
     transform: scale(0.9) translateY(20px);
     opacity: 0.6;
+    filter: brightness(0.4);
+    
     border-radius: 36px;
     background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
     pointer-events: none;
-    /* 滑らかに動かすためのトランジション */
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
+    
+    /* 滑らかなアニメーション設定 */
+    transition: 
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+        opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+        filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-/* スワイプ時に付与されるクラス（手前に来る） */
+
+/* 手前に来る時の状態 */
 #next-card.coming-up {
     transform: scale(1.0) translateY(0px) !important;
     opacity: 1.0 !important;
+    filter: brightness(1.0) !important;
 }
 
 #next-card .card-face {
