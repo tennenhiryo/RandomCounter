@@ -1,52 +1,32 @@
 :root {
-    /* ライトモード（デフォルト） */
-    --bg-color: #f0f2f5;
-    --text-color: #333;
-    --card-bg: #ffffff;
-    --stats-bg: #ffffff;
-    --accent-color: #007bff;
-    --sub-text: #555;
-    --back-face-bg: #fffbe6;
-    --back-face-border: #ffd700;
-    --list-bg: #fafafa;
-    --modal-bg: #ffffff;
-}
-
-/* ダークモード用変数 */
-body.dark-mode {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --card-bg: #1e1e1e;
-    --stats-bg: #1e1e1e;
-    --accent-color: #4dabf7;
-    --sub-text: #aaa;
-    --back-face-bg: #333;
-    --back-face-border: #555;
-    --list-bg: #2c2c2c;
-    --modal-bg: #2c2c2c;
+    --bg-color: #050505;
+    --card-bg: #111;
+    --text-main: #fff;
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00ff;
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 body {
-    font-family: sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: var(--bg-color);
-    color: var(--text-color);
-    overflow: hidden; /* 全体のスクロール禁止 */
-    overscroll-behavior: none; /* スマホ特有のバウンス禁止 */
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow: hidden;
+    overscroll-behavior: none;
     user-select: none;
     touch-action: none;
-    transition: background 0.3s, color 0.3s;
 }
 
 .container {
     width: 100%;
     max-width: 400px;
-    height: 100vh; /* 画面いっぱいに固定 */
+    height: 100vh;
     padding: 20px;
     box-sizing: border-box;
     position: relative;
@@ -55,11 +35,7 @@ body {
     justify-content: center;
 }
 
-.screen {
-    display: none;
-    width: 100%;
-    height: 100%;
-}
+.screen { display: none; width: 100%; height: 100%; }
 .screen.active { 
     display: flex;
     flex-direction: column;
@@ -67,16 +43,73 @@ body {
     align-items: center;
 }
 
-/* テーマ切り替えボタン */
-#theme-toggle {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+/* ネオンテキスト */
+.neon-text {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+    letter-spacing: 2px;
+}
+.neon-text-small {
+    color: #888;
+    text-shadow: 0 0 5px var(--neon-blue);
+    font-size: 0.8rem;
+}
+.neon-text-blue {
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* ボタン */
+.btn-neon {
+    background: transparent;
+    color: var(--neon-blue);
+    border: 2px solid var(--neon-blue);
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border-radius: 5px;
     cursor: pointer;
-    z-index: 1000;
+    box-shadow: 0 0 10px var(--neon-blue) inset, 0 0 10px var(--neon-blue);
+    text-transform: uppercase;
+    font-family: inherit;
+    transition: 0.2s;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 250px;
+}
+.btn-neon:active {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+.btn-danger {
+    color: var(--neon-pink);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink) inset, 0 0 10px var(--neon-pink);
+}
+.btn-danger:active {
+    background: var(--neon-pink);
+    color: #000;
+}
+
+/* 入力エリア */
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+input {
+    font-size: 1.5rem;
+    padding: 10px;
+    width: 80px;
+    text-align: center;
+    border: 1px solid var(--neon-blue);
+    background: #000;
+    color: var(--neon-blue);
+    border-radius: 5px;
+    box-shadow: 0 0 5px var(--neon-blue);
+    font-family: inherit;
 }
 
 /* 一時停止ボタン */
@@ -84,10 +117,15 @@ body {
     position: absolute;
     top: 15px;
     left: 20px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    color: var(--sub-text);
+    color: var(--neon-blue);
     z-index: 10;
+    border: 1px solid var(--neon-blue);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 5px var(--neon-blue);
 }
 
 /* モーダル */
@@ -96,51 +134,22 @@ body {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.85);
     z-index: 100;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(5px);
 }
 .modal.active { display: flex; }
 .modal-content {
-    background: var(--modal-bg);
-    padding: 30px;
-    border-radius: 15px;
+    background: #111;
+    padding: 40px;
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 20px var(--neon-blue);
+    border-radius: 10px;
     text-align: center;
     width: 80%;
     max-width: 300px;
-    color: var(--text-color);
-}
-.btn-resume { background: #28a745; margin-bottom: 10px; width: 100%; color: white; padding: 15px; border:none; border-radius:30px; font-size:1rem;}
-.btn-quit { background: #dc3545; width: 100%; color: white; padding: 15px; border:none; border-radius:30px; font-size:1rem;}
-
-/* 入力周り */
-.input-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 20px 0;
-}
-input {
-    font-size: 1.2rem;
-    padding: 10px;
-    width: 80px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: var(--card-bg);
-    color: var(--text-color);
-}
-.btn-primary {
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* カードエリア */
@@ -154,15 +163,13 @@ input {
     perspective: 1000px;
     margin: 20px 0;
 }
-
 #card {
     width: 280px;
-    height: 380px;
+    height: 400px;
     position: absolute;
     cursor: grab;
     will-change: transform;
 }
-
 #card-inner {
     width: 100%;
     height: 100%;
@@ -170,17 +177,17 @@ input {
     text-align: center;
     transition: transform 0.6s;
     transform-style: preserve-3d;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
 }
-
 #card-inner.is-flipped { transform: rotateY(180deg); }
 
 .card-face {
     position: absolute;
     width: 100%; height: 100%;
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
-    border-radius: 20px;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -188,55 +195,62 @@ input {
     padding: 20px;
     box-sizing: border-box;
 }
-
-.card-front { font-size: 6rem; font-weight: bold; color: var(--text-color); }
+.card-front {
+    font-size: 6rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+    text-shadow: 0 0 20px var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+}
 .card-back {
     transform: rotateY(180deg);
-    font-size: 1.4rem;
-    color: var(--text-color);
+    font-size: 1.3rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
     line-height: 1.5;
-    background: var(--back-face-bg);
-    border: 2px solid var(--back-face-border);
+    background: #1a051a;
+    border: 1px solid var(--neon-pink);
 }
 
-.hint { color: var(--sub-text); margin-top: 10px; }
-#progress { font-weight: bold; color: var(--sub-text); }
-
-/* 結果画面の修正 */
-#result-screen {
-    /* 画面全体を使えるように調整 */
-    justify-content: flex-start; 
-    padding-top: 50px; 
+.hint { 
+    color: #666; 
+    margin-top: 10px; 
+    font-size: 0.8rem; 
+    letter-spacing: 1px;
 }
+
+/* 結果画面 */
+#result-screen { justify-content: flex-start; padding-top: 50px; }
 .stats {
-    background: var(--stats-bg);
+    background: #111;
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 10px;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 1px solid #333;
     width: 100%;
 }
-.stat-big { font-size: 3.5rem; font-weight: bold; color: var(--accent-color); margin: 10px 0; }
-
+.stat-big { font-size: 3.5rem; font-weight: bold; margin: 10px 0; }
 .list-wrapper {
-    flex-grow: 1; /* 余ったスペースを埋める */
+    flex-grow: 1;
     width: 100%;
-    min-height: 0; /* フレックスアイテムの縮小を許可 */
+    min-height: 0;
     margin-bottom: 20px;
     position: relative;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #000;
 }
-
 .list-box {
     height: 100%;
-    max-height: 250px; /* 高くなりすぎないように制限 */
-    overflow-y: auto; /* ここだけスクロール許可 */
+    max-height: 250px;
+    overflow-y: auto;
     text-align: left;
-    background: var(--list-bg);
     padding: 15px;
-    border-radius: 10px;
     font-size: 0.9rem;
-    color: var(--text-color);
-    border: 1px solid #444; /* ダークモードでも見えるように */
-    overscroll-behavior: contain; /* スクロールが親に伝播しないようにする */
+    color: #ddd;
+    overscroll-behavior: contain;
 }
-.footer-btn { margin-bottom: 20px; }
+.list-item {
+    border-bottom: 1px solid #333;
+    padding: 10px 0;
+}
