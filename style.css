@@ -1,3 +1,31 @@
+:root {
+    /* ライトモード（デフォルト） */
+    --bg-color: #f0f2f5;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --stats-bg: #ffffff;
+    --accent-color: #007bff;
+    --sub-text: #555;
+    --back-face-bg: #fffbe6;
+    --back-face-border: #ffd700;
+    --list-bg: #fafafa;
+    --modal-bg: #ffffff;
+}
+
+/* ダークモード用変数 */
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --stats-bg: #1e1e1e;
+    --accent-color: #4dabf7;
+    --sub-text: #aaa;
+    --back-face-bg: #333;
+    --back-face-border: #555;
+    --list-bg: #2c2c2c;
+    --modal-bg: #2c2c2c;
+}
+
 body {
     font-family: sans-serif;
     margin: 0;
@@ -6,32 +34,59 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #f0f2f5;
-    overflow: hidden;
+    background: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden; /* 全体のスクロール禁止 */
+    overscroll-behavior: none; /* スマホ特有のバウンス禁止 */
     user-select: none;
-    touch-action: none; /* スクロール無効化 */
+    touch-action: none;
+    transition: background 0.3s, color 0.3s;
 }
 
 .container {
     width: 100%;
     max-width: 400px;
+    height: 100vh; /* 画面いっぱいに固定 */
     padding: 20px;
     box-sizing: border-box;
-    text-align: center;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.screen { display: none; }
-.screen.active { display: block; }
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+.screen.active { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* テーマ切り替えボタン */
+#theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+}
 
 /* 一時停止ボタン */
 #pause-btn {
     position: absolute;
-    top: 10px;
+    top: 15px;
     left: 20px;
     font-size: 2rem;
     cursor: pointer;
-    color: #555;
+    color: var(--sub-text);
     z-index: 10;
 }
 
@@ -41,22 +96,23 @@ body {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.7);
     z-index: 100;
     justify-content: center;
     align-items: center;
 }
 .modal.active { display: flex; }
 .modal-content {
-    background: white;
+    background: var(--modal-bg);
     padding: 30px;
     border-radius: 15px;
     text-align: center;
     width: 80%;
     max-width: 300px;
+    color: var(--text-color);
 }
-.btn-resume { background: #28a745; margin-bottom: 10px; width: 100%; }
-.btn-quit { background: #dc3545; width: 100%; }
+.btn-resume { background: #28a745; margin-bottom: 10px; width: 100%; color: white; padding: 15px; border:none; border-radius:30px; font-size:1rem;}
+.btn-quit { background: #dc3545; width: 100%; color: white; padding: 15px; border:none; border-radius:30px; font-size:1rem;}
 
 /* 入力周り */
 .input-group {
@@ -73,31 +129,32 @@ input {
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-color);
 }
-button {
-    background: #007bff;
+.btn-primary {
+    background: var(--accent-color);
     color: white;
     border: none;
-    padding: 15px;
+    padding: 15px 40px;
     font-size: 1.1rem;
     border-radius: 30px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* カードエリア（3D空間） */
+/* カードエリア */
 #card-container {
     position: relative;
-    height: 380px; /* 少し縦長に */
+    height: 400px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px; /* 奥行き */
+    perspective: 1000px;
     margin: 20px 0;
 }
 
-/* スワイプで動く物体 */
 #card {
     width: 280px;
     height: 380px;
@@ -106,7 +163,6 @@ button {
     will-change: transform;
 }
 
-/* 回転する中身 */
 #card-inner {
     width: 100%;
     height: 100%;
@@ -114,68 +170,73 @@ button {
     text-align: center;
     transition: transform 0.6s;
     transform-style: preserve-3d;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     border-radius: 20px;
 }
 
-/* ひっくり返った状態クラス */
-#card-inner.is-flipped {
-    transform: rotateY(180deg);
-}
+#card-inner.is-flipped { transform: rotateY(180deg); }
 
-/* カードの表面・裏面共通 */
 .card-face {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden; /* Safari用 */
-    backface-visibility: hidden;
+    width: 100%; height: 100%;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
     border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: white;
+    background: var(--card-bg);
     padding: 20px;
     box-sizing: border-box;
 }
 
-/* 表面（数字） */
-.card-front {
-    font-size: 6rem;
-    font-weight: bold;
-    color: #333;
-}
-
-/* 裏面（英文） */
+.card-front { font-size: 6rem; font-weight: bold; color: var(--text-color); }
 .card-back {
     transform: rotateY(180deg);
-    font-size: 1.4rem; /* 文字サイズ調整 */
-    color: #333;
+    font-size: 1.4rem;
+    color: var(--text-color);
     line-height: 1.5;
-    background: #fffbe6; /* 少し黄色っぽく（単語帳風） */
-    border: 2px solid #ffd700;
+    background: var(--back-face-bg);
+    border: 2px solid var(--back-face-border);
 }
 
-.hint { color: #888; margin-top: 10px; }
-#progress { font-weight: bold; color: #555; }
+.hint { color: var(--sub-text); margin-top: 10px; }
+#progress { font-weight: bold; color: var(--sub-text); }
 
-/* 結果画面 */
+/* 結果画面の修正 */
+#result-screen {
+    /* 画面全体を使えるように調整 */
+    justify-content: flex-start; 
+    padding-top: 50px; 
+}
 .stats {
-    background: white;
+    background: var(--stats-bg);
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
 }
-.stat-big { font-size: 3.5rem; font-weight: bold; color: #007bff; margin: 10px 0; }
+.stat-big { font-size: 3.5rem; font-weight: bold; color: var(--accent-color); margin: 10px 0; }
+
+.list-wrapper {
+    flex-grow: 1; /* 余ったスペースを埋める */
+    width: 100%;
+    min-height: 0; /* フレックスアイテムの縮小を許可 */
+    margin-bottom: 20px;
+    position: relative;
+}
+
 .list-box {
-    max-height: 150px;
-    overflow-y: auto;
+    height: 100%;
+    max-height: 250px; /* 高くなりすぎないように制限 */
+    overflow-y: auto; /* ここだけスクロール許可 */
     text-align: left;
-    background: #fafafa;
+    background: var(--list-bg);
     padding: 15px;
     border-radius: 10px;
     font-size: 0.9rem;
-    color: #555;
-    border: 1px solid #eee;
+    color: var(--text-color);
+    border: 1px solid #444; /* ダークモードでも見えるように */
+    overscroll-behavior: contain; /* スクロールが親に伝播しないようにする */
 }
+.footer-btn { margin-bottom: 20px; }

@@ -1,6 +1,5 @@
 // ==========================================
 //  【ここにGoogle Keepのテキストを貼り付けてください】
-//  ※ バッククォート(`)で囲んでください
 // ==========================================
 const rawData = `
 001 Let’s try anyway.
@@ -606,9 +605,19 @@ const rawData = `
 `;
 // ==========================================
 
-// テキストデータを分解して辞書形式に変換
-const sentenceList = {};
+// --- ダークモード設定 ---
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const btn = document.getElementById('theme-toggle');
+    if (document.body.classList.contains('dark-mode')) {
+        btn.innerText = "☀️"; // 太陽アイコン
+    } else {
+        btn.innerText = "🌙"; // 月アイコン
+    }
+}
 
+// テキストデータを分解
+const sentenceList = {};
 rawData.trim().split('\n').forEach(line => {
     if (!line.trim()) return;
     const parts = line.trim().split(' ');
@@ -619,12 +628,11 @@ rawData.trim().split('\n').forEach(line => {
     }
 });
 
-
 let numbers = [];
 let leftSwiped = [];
 let currentIndex = 0;
 let startX = 0;
-let currentX = 0; // ここが重要
+let currentX = 0;
 let isDragging = false;
 let isFlipped = false;
 
@@ -650,11 +658,9 @@ function startGame() {
 
     numbers = [];
     for (let i = min; i <= max; i++) numbers.push(i);
-    
     if (numbers.length === 0) { alert("指定範囲の数字が見つかりません"); return; }
 
     numbers = shuffle(numbers);
-
     currentIndex = 0;
     leftSwiped = [];
 
@@ -693,19 +699,18 @@ function updateCard() {
     document.getElementById('progress').innerText = `残り: ${numbers.length - currentIndex}枚`;
 }
 
-// --- 【修正済み】タッチ操作イベント ---
-
+// --- タッチ操作イベント ---
 cardWrapper.addEventListener('touchstart', (e) => {
     if(document.getElementById('pause-modal').classList.contains('active')) return;
     startX = e.touches[0].clientX;
-    currentX = startX; // ★ここを修正しました（初期位置をセット）
+    currentX = startX;
     isDragging = true;
     cardWrapper.style.transition = 'none';
 });
 
 cardWrapper.addEventListener('touchmove', (e) => {
     if(!isDragging || document.getElementById('pause-modal').classList.contains('active')) return;
-    currentX = e.touches[0].clientX; // 動いている間だけ更新
+    currentX = e.touches[0].clientX;
     const diffX = currentX - startX;
     const deg = diffX / 15;
     cardWrapper.style.transform = `translate(${diffX}px, 0px) rotate(${deg}deg)`;
@@ -719,11 +724,8 @@ cardWrapper.addEventListener('touchend', () => {
 
     const diffX = currentX - startX;
     
-    // 移動量が小さい（10px未満）ならタップとみなす
     if (Math.abs(diffX) < 10) {
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
-        
-        // 英文があれば裏返す
         const currentNum = numbers[currentIndex];
         if (sentenceList[currentNum]) {
             cardInner.classList.toggle('is-flipped');
@@ -732,21 +734,16 @@ cardWrapper.addEventListener('touchend', () => {
         return;
     }
 
-    // スワイプ判定
     cardWrapper.style.transition = 'transform 0.3s ease-out';
     if (diffX > 100) { 
-        // 右へ (Next)
         cardWrapper.style.transform = `translate(100vw, 0px) rotate(45deg)`;
         setTimeout(() => { nextNum(false); }, 300);
     } else if (diffX < -100) { 
-        // 左へ (Check)
         cardWrapper.style.transform = `translate(-100vw, 0px) rotate(-45deg)`;
         setTimeout(() => { nextNum(true); }, 300);
     } else { 
-        // 元に戻る
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
     }
-    
     startX = 0;
     currentX = 0;
 });
@@ -776,8 +773,8 @@ function showResults() {
     } else {
         leftSwiped.forEach(num => {
             const div = document.createElement('div');
-            div.style.borderBottom = "1px solid #eee";
-            div.style.padding = "5px 0";
+            div.style.borderBottom = "1px solid #444"; // ダークモード対応のため色指定変更
+            div.style.padding = "8px 0";
             const text = sentenceList[num] ? ` : ${sentenceList[num]}` : "";
             div.innerText = `${num}${text}`;
             listContainer.appendChild(div);
