@@ -13,7 +13,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0; padding: 0;
     display: flex; justify-content: center; align-items: center;
-    height: 100vh;
+    /* 画面固定・スクロール防止の強化 */
+    width: 100vw; height: 100vh; position: fixed;
     background-color: var(--bg-color);
     color: var(--text-main);
     overflow: hidden;
@@ -94,7 +95,6 @@ input:focus { border-color: var(--accent-blue); }
     perspective: 1200px;
 }
 
-/* メインのカード（手前） */
 #card {
     width: 300px; height: 420px;
     position: absolute;
@@ -102,12 +102,13 @@ input:focus { border-color: var(--accent-blue); }
     z-index: 10;
 }
 
-/* 次のカード（奥） */
+/* 奥のカード（初期状態） */
 #next-card {
     width: 300px; height: 420px;
     position: absolute;
     z-index: 5;
-    transform: scale(0.95) translateY(10px);
+    /* 小さく・下に・薄くしておく */
+    transform: scale(0.9) translateY(20px);
     opacity: 0.6;
     border-radius: 36px;
     background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
@@ -115,7 +116,15 @@ input:focus { border-color: var(--accent-blue); }
     backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
     pointer-events: none;
+    /* 滑らかに動かすためのトランジション */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
 }
+/* スワイプ時に付与されるクラス（手前に来る） */
+#next-card.coming-up {
+    transform: scale(1.0) translateY(0px) !important;
+    opacity: 1.0 !important;
+}
+
 #next-card .card-face {
     box-shadow: none; background: transparent; border: none;
 }
