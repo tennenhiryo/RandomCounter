@@ -115,7 +115,6 @@ function updateCard() {
         // CSSの初期状態に戻す
         nextCard.style.transform = ''; 
         nextCard.style.opacity = '';
-        nextCard.style.filter = ''; // 明るさもリセット
         
     } else {
         nextCard.style.display = 'none';
