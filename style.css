@@ -13,7 +13,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0; padding: 0;
     display: flex; justify-content: center; align-items: center;
-    width: 100vw; height: 100vh; position: fixed; /* 画面固定 */
+    width: 100vw; height: 100vh; position: fixed;
     background-color: var(--bg-color);
     color: var(--text-main);
     overflow: hidden;
@@ -87,7 +87,6 @@ input:focus { border-color: var(--accent-blue); }
     padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;
 }
 
-/* --- カードエリア --- */
 #card-container {
     position: relative;
     height: 420px; width: 100%;
@@ -102,13 +101,11 @@ input:focus { border-color: var(--accent-blue); }
     z-index: 10;
 }
 
-/* 奥のカード（初期状態） */
+/* 奥のカード */
 #next-card {
     width: 300px; height: 420px;
     position: absolute;
     z-index: 5;
-    
-    /* 初期：少し小さく・下・半透明 */
     transform: scale(0.9) translateY(20px);
     opacity: 0.8;
     
@@ -118,32 +115,31 @@ input:focus { border-color: var(--accent-blue); }
     backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
     pointer-events: none;
-    overflow: hidden; /* 暗幕がはみ出ないように */
+    overflow: hidden; 
     
     transition: 
         transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
         opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* 奥のカードにかぶせる「暗幕」レイヤー */
+/* 奥のカードの暗幕 */
 #next-card::after {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 36px;
     pointer-events: none;
     transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* 手前に来る時の状態 */
+/* 手前に来る時 */
 #next-card.coming-up {
     transform: scale(1.0) translateY(0px) !important;
     opacity: 1.0 !important;
 }
-/* 手前に来るときは「暗幕」を透明にして明るく見せる */
 #next-card.coming-up::after {
-    opacity: 0 !important;
+    opacity: 0 !important; /* 暗幕を消す */
 }
 
 #next-card .card-face {
@@ -161,7 +157,7 @@ input:focus { border-color: var(--accent-blue); }
 }
 #card-inner.is-flipped { transform: rotateY(180deg); }
 
-/* ガラス質感の共通設定 */
+/* ガラス質感共通 */
 .card-face {
     position: absolute; width: 100%; height: 100%;
     -webkit-backface-visibility: hidden; backface-visibility: hidden;
@@ -181,7 +177,6 @@ input:focus { border-color: var(--accent-blue); }
 .card-back {
     transform: rotateY(180deg);
     font-size: 1.4rem; color: var(--text-main); line-height: 1.6; font-weight: 500;
-    /* 裏面は少しだけ暗く（透け感キープ） */
     background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
     border: 1px solid rgba(255, 255, 255, 0.08);
 }

@@ -28,7 +28,6 @@ let currentX = 0;
 let isDragging = false;
 let isFlipped = false;
 
-// 要素取得
 const cardWrapper = document.getElementById('card'); 
 const cardInner = document.getElementById('card-inner'); 
 const frontFace = document.getElementById('card-front');
@@ -87,7 +86,6 @@ function updateCard() {
     
     const currentNum = numbers[currentIndex];
     
-    // 1. メインカード更新
     cardInner.style.transition = 'none';
     cardWrapper.style.transition = 'none';
     cardInner.classList.remove('is-flipped');
@@ -104,30 +102,26 @@ function updateCard() {
         backFace.style.color = "var(--text-sub)";
     }
 
-    // 2. 次のカード更新
     const nextNum = numbers[currentIndex + 1];
     if (nextNum !== undefined) {
         nextCard.style.display = 'flex';
         nextCardFront.innerText = nextNum;
         
-        // アニメーションリセット：奥に戻す
+        // リセット
         nextCard.classList.remove('coming-up');
-        // CSSの初期状態に戻す
         nextCard.style.transform = ''; 
         nextCard.style.opacity = '';
-        // ★以前あった filter = '' は削除済みです
         
     } else {
         nextCard.style.display = 'none';
     }
 
-    void cardInner.offsetWidth; // 強制再描画
+    void cardInner.offsetWidth; 
     cardInner.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 
     document.getElementById('progress').innerText = `残り: ${numbers.length - currentIndex}`;
 }
 
-// --- タッチ操作イベント ---
 cardWrapper.addEventListener('touchstart', (e) => {
     if(document.getElementById('pause-modal').classList.contains('active')) return;
     startX = e.touches[0].clientX;
@@ -152,7 +146,6 @@ cardWrapper.addEventListener('touchend', () => {
 
     const diffX = currentX - startX;
     
-    // タップ判定
     if (Math.abs(diffX) < 10) {
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
         cardInner.classList.toggle('is-flipped');
@@ -160,21 +153,19 @@ cardWrapper.addEventListener('touchend', () => {
         return;
     }
 
-    // スワイプ判定
     cardWrapper.style.transition = 'transform 0.4s ease-out';
     
-    if (diffX > 80) { // 右スワイプ
+    if (diffX > 80) { 
         cardWrapper.style.transform = `translate(120vw, 0px) rotate(30deg)`;
         if (numbers[currentIndex + 1] !== undefined) nextCard.classList.add('coming-up');
         setTimeout(() => { nextNum(false); }, 300);
 
-    } else if (diffX < -80) { // 左スワイプ
+    } else if (diffX < -80) { 
         cardWrapper.style.transform = `translate(-120vw, 0px) rotate(-30deg)`;
         if (numbers[currentIndex + 1] !== undefined) nextCard.classList.add('coming-up');
         setTimeout(() => { nextNum(true); }, 300);
         
     } else { 
-        // 元に戻る
         cardWrapper.style.transform = `translate(0px, 0px) rotate(0deg)`;
     }
     startX = 0;
@@ -194,7 +185,6 @@ function showResults() {
     const totalDone = currentIndex; 
     const unknownCount = leftSwiped.length;
     const knownCount = totalDone - unknownCount;
-
     const percent = totalDone === 0 ? 0 : Math.round((knownCount / totalDone) * 100);
 
     document.getElementById('result-fraction').innerText = `${knownCount} / ${totalDone}`;
