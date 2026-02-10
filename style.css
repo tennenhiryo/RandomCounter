@@ -1,0 +1,181 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f2f5;
+    overflow: hidden;
+    user-select: none;
+    touch-action: none; /* スクロール無効化 */
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* 一時停止ボタン */
+#pause-btn {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #555;
+    z-index: 10;
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+}
+.btn-resume { background: #28a745; margin-bottom: 10px; width: 100%; }
+.btn-quit { background: #dc3545; width: 100%; }
+
+/* 入力周り */
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+input {
+    font-size: 1.2rem;
+    padding: 10px;
+    width: 80px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* カードエリア（3D空間） */
+#card-container {
+    position: relative;
+    height: 380px; /* 少し縦長に */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px; /* 奥行き */
+    margin: 20px 0;
+}
+
+/* スワイプで動く物体 */
+#card {
+    width: 280px;
+    height: 380px;
+    position: absolute;
+    cursor: grab;
+    will-change: transform;
+}
+
+/* 回転する中身 */
+#card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border-radius: 20px;
+}
+
+/* ひっくり返った状態クラス */
+#card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* カードの表面・裏面共通 */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari用 */
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 表面（数字） */
+.card-front {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 裏面（英文） */
+.card-back {
+    transform: rotateY(180deg);
+    font-size: 1.4rem; /* 文字サイズ調整 */
+    color: #333;
+    line-height: 1.5;
+    background: #fffbe6; /* 少し黄色っぽく（単語帳風） */
+    border: 2px solid #ffd700;
+}
+
+.hint { color: #888; margin-top: 10px; }
+#progress { font-weight: bold; color: #555; }
+
+/* 結果画面 */
+.stats {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.stat-big { font-size: 3.5rem; font-weight: bold; color: #007bff; margin: 10px 0; }
+.list-box {
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: left;
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    border: 1px solid #eee;
+}
