@@ -1,0 +1,103 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f2f5;
+    overflow: hidden; /* スクロール禁止 */
+    user-select: none; /* テキスト選択禁止 */
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* 画面切り替え */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* 入力周り */
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+input {
+    font-size: 1.2rem;
+    padding: 10px;
+    width: 80px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+button:active { transform: scale(0.98); }
+
+/* カード */
+#card-container {
+    position: relative;
+    height: 350px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+#card {
+    width: 260px;
+    height: 360px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    cursor: grab;
+    will-change: transform; /* アニメーション最適化 */
+}
+
+.hint { color: #888; margin-top: 10px; }
+#progress { font-weight: bold; color: #555; }
+
+/* 結果画面 */
+.stats {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.stat-big { font-size: 3.5rem; font-weight: bold; color: #007bff; margin: 10px 0; }
+.list-box {
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: left;
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    border: 1px solid #eee;
+}
